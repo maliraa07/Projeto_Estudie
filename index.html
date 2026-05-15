@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR" data-profile="intense">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#14101c" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'; upgrade-insecure-requests"
+  />
+  <title>Estudie — produtividade no seu ritmo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="badge">Projeto - Estudie</span>
+      <h1>Produtividade no seu ritmo, sem overhead.</h1>
+      <p>
+        Você configura o tempo de foco, ruído rosa ou trilhas MP3 locais se quiser, e o timer roda sozinho.<br/>
+      </p>
+    </header>
+
+    <div class="card">
+      <div class="card-grid">
+        <div class="col-setup">
+          <div class="section-label">Qual é o modo de hoje?</div>
+          <div class="profiles" role="group" aria-label="Modo de hoje">
+            <button type="button" class="active" data-profile="intense" aria-pressed="true">
+              <span class="t">Pomodoro clássico</span>
+              <span class="s">O de sempre que funciona · 25 min / 5 de pausa</span>
+            </button>
+            <button type="button" data-profile="learn" aria-pressed="false">
+              <span class="t">Deep work</span>
+              <span class="s">Pra quando tem que entregar · 45 min / 15 de pausa</span>
+            </button>
+            <button type="button" data-profile="light" aria-pressed="false">
+              <span class="t">Modo manutenção</span>
+              <span class="s">PRs, e-mails, reuniões · 50 min / 10 de pausa</span>
+            </button>
+            <button type="button" data-profile="relax" aria-pressed="false">
+              <span class="t">Low effort</span>
+              <span class="s">Blocos curtos pra dias difíceis · 20 min / 10 de pausa</span>
+            </button>
+          </div>
+
+          <div class="task-field">
+            <label for="taskGoal">O que tá rodando agora?</label>
+            <input
+              type="text"
+              id="taskGoal"
+              maxlength="120"
+              placeholder="Ex.: capítulo 4"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="duration-row" aria-label="Minutos">
+            <div class="dur">
+              <label for="focusMin">Foco</label>
+              <div class="dur-input">
+                <input type="number" id="focusMin" min="1" max="180" step="1" inputmode="numeric" />
+                <span class="suffix">min</span>
+              </div>
+            </div>
+            <div class="dur">
+              <label for="breakMin">Pausa</label>
+              <div class="dur-input">
+                <input type="number" id="breakMin" min="1" max="120" step="1" inputmode="numeric" />
+                <span class="suffix">min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-timer">
+          <div class="modes" role="tablist" aria-label="Modo">
+            <button type="button" data-mode="focus" class="active" role="tab" aria-selected="true">Foco</button>
+            <button type="button" data-mode="break" role="tab" aria-selected="false">Pausa</button>
+          </div>
+
+          <div class="ring-wrap" aria-live="polite">
+            <div class="ring" id="ring" data-mode="focus" style="--progress: 0">
+              <div class="ring-inner">
+                <div class="time" id="display">25:00</div>
+                <div class="label" id="modeLabel">Foco</div>
+                <div class="task-peek" id="taskPeek" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button type="button" class="btn-primary" id="toggle">Iniciar</button>
+            <button type="button" class="btn-ghost" id="reset">Zerar</button>
+            <button type="button" class="btn-ghost btn-small" id="addFive" title="+5 min neste bloco">+5 min</button>
+          </div>
+          <p class="timer-note">
+            Use <kbd>Espaço</kbd> para dar play/pause no timer.
+          </p>
+        </div>
+
+        <div class="col-audio">
+          <div class="sound-block">
+            <div class="section-label">Som</div>
+            <div class="sound-mode-row" role="group" aria-label="Som opcional">
+              <button type="button" class="sound-btn" id="soundToggle" aria-pressed="false">Rosa</button>
+              <button type="button" class="sound-btn" id="musicToggle" aria-pressed="false">Música</button>
+            </div>
+            <div class="music-field">
+              <label for="musicSelect">Trilha</label>
+              <select id="musicSelect" aria-describedby="musicHelp"></select>
+            </div>
+            <div class="sound-row">
+              <label for="vol">Volume</label>
+              <input type="range" id="vol" min="0" max="100" value="22" />
+            </div>
+            <p class="hint" id="hint" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+      <p class="dev-page-strip" id="musicHelp">
+        <span id="devCredit" class="dev-credit">
+          <strong>Maria Fernanda Lira</strong> — Desenvolvedora Jr ·
+          <a href="mailto:mariafernandalira072022@gmail.com">Email</a>
+          ·
+          <a href="https://github.com/maliraa07" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <audio id="bgMusic" preload="auto" loop playsinline hidden></audio>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>
